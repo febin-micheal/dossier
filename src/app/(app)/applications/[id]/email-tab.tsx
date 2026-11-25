@@ -13,6 +13,7 @@ import { cn } from "@/lib/cn";
 import { copyText } from "@/lib/copy-text";
 
 import { SendWithGmail, type GmailSender } from "./send-with-gmail";
+import { SendWithHunt } from "./send-with-hunt";
 import { aboutWords } from "./tabs";
 
 /** The PDFs to attach, by their file names; null when the application doesn't have one. */
@@ -28,6 +29,7 @@ export type Attachments = { resume: string | null; letter: string | null };
  */
 export function EmailTab({
   applicationId,
+  postingUrl,
   units,
   renderUnit,
   history,
@@ -41,6 +43,7 @@ export function EmailTab({
   before,
 }: {
   applicationId: string;
+  postingUrl?: string;
   /** The email's units; null until it's written. */
   units: Unit[] | null;
   renderUnit: UnitRenderer;
@@ -141,6 +144,7 @@ export function EmailTab({
             <a href={mailtoHref({ to, subject, body })} className={buttonClassName(fromGmail ? "text" : "secondary", "sm")}>
               Open in mail app
             </a>
+            {postingUrl && <SendWithHunt applicationId={applicationId} postingUrl={postingUrl} sentBefore={false} />}
             {gmail && (
               <SendWithGmail
                 applicationId={applicationId}

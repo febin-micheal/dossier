@@ -1344,6 +1344,7 @@ export function ApplicationView({
         <TabsContent value="email" className="flex min-h-0 min-w-0 flex-[999_1_480px]">
           <EmailTab
             applicationId={application.id}
+            postingUrl={posting.url}
             units={emailUnits}
             renderUnit={!emailUnits ? plainUnit : unitsOf(DocumentKind.EMAIL, emailUnits)}
             history={historyButton(DocumentKind.EMAIL)}

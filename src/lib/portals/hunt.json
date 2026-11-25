@@ -1,0 +1,91 @@
+{
+  "format": 1,
+  "id": "HUNT",
+  "name": "Hunt (your portals)",
+  "version": "1.0.0",
+  "description": "The Indian portals hunt runs for you: Instahyre, Hirist, Cutshort, Shine, Naukri, Indeed, LinkedIn Easy Apply, Freelancer - searched over their own APIs with your saved sessions.",
+  "tag": "India - free, your sessions - apply goes through the hunt engine",
+  "countries": [
+    "in"
+  ],
+  "kinds": [
+    "tech"
+  ],
+  "radius": false,
+  "hosts": [
+    "127.0.0.1",
+    "localhost"
+  ],
+  "fields": [
+    {
+      "name": "server",
+      "type": "server",
+      "label": "Hunt engine address",
+      "default": "http://127.0.0.1:8788"
+    },
+    {
+      "name": "token",
+      "type": "text",
+      "label": "Hunt API token"
+    }
+  ],
+  "credit": {
+    "text": "Jobs by hunt"
+  },
+  "kind": "json",
+  "search": {
+    "url": "{base}/api/v1/search",
+    "headers": {
+      "Authorization": "Bearer {fields.token}"
+    },
+    "params": [
+      {
+        "name": "q",
+        "value": "{keywords}"
+      },
+      {
+        "name": "size",
+        "value": "{size}"
+      },
+      {
+        "name": "offset",
+        "value": "{offset}"
+      }
+    ],
+    "paging": {
+      "type": "offset",
+      "size": 20,
+      "max": 200
+    },
+    "items": "items",
+    "posting": {
+      "id": "id",
+      "title": "title",
+      "company": "company",
+      "place": "place",
+      "remote": {
+        "path": "remote",
+        "map": {
+          "remote": true,
+          "onsite": false
+        }
+      },
+      "postedAt": {
+        "path": "posted_at",
+        "as": "iso"
+      },
+      "url": {
+        "path": "url",
+        "link": true
+      },
+      "description": "description"
+    }
+  },
+  "details": {
+    "type": "page"
+  },
+  "test": {
+    "keywords": "python",
+    "country": "in"
+  }
+}

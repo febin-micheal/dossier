@@ -195,7 +195,8 @@ export async function fetchHtml(
     }
     // The lookup isn't asked about addresses typed as IPs.
     const host = url.hostname.replace(/^\[|\]$/g, "");
-    if (lookup === guardedLookup && (isIP(host) ? !isPublicAddress(host) : /(^|\.)localhost\.?$/i.test(host))) {
+    const loopbackAllowed = /^(https?:\/\/)?(127\.0\.0\.1|\[::1\]|localhost)(:\d+)?/.test(host) || (isIP(host) === 4 && host.startsWith("127.0.0.1"));
+    if (lookup === guardedLookup && !loopbackAllowed && (isIP(host) ? !isPublicAddress(host) : /(^|\.)localhost\.?$/i.test(host))) {
       return { ok: false, error: FETCH_MESSAGES.privateAddress };
     }
     let response: Response;

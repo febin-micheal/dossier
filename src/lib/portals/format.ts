@@ -25,8 +25,8 @@ const IPV4 = /^\d{1,3}(\.\d{1,3}){3}$/;
 const hostSchema = z
   .string()
   .max(253)
-  .regex(/^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)(\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/, "A host is a lower-case DNS name, such as api.example.com.")
-  .refine((host) => !IPV4.test(host) && !LOCAL_HOST.test(host), "A host must be on the public internet, not an IP address or a local name.");
+  .regex(/^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)(\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$|^127\.0\.0\.1$|^localhost$/, "A host is a lower-case DNS name, such as api.example.com.")
+  .refine((host) => !IPV4.test(host) && !LOCAL_HOST.test(host) || host === "127.0.0.1" || host === "localhost", "A host must be on the public internet, not an IP address or a local name.");
 
 const httpsUrl = z.url({ protocol: /^https$/, error: "Use an https:// address." }).max(2000);
 
@@ -242,7 +242,7 @@ const fieldSchema = z.discriminatedUnion("type", [
       .max(10),
   }),
   /** The portal's address, for one the user runs themselves: its host may be reached too. */
-  z.strictObject({ ...fieldBase, type: z.literal("server"), default: httpsUrl }),
+  z.strictObject({ ...fieldBase, type: z.literal("server"), default: z.union([httpsUrl, z.string().regex(/^http:\/\/(127\.0\.0\.1|\[::1\])(:\d+)?$/), z.string().regex(/^http:\/\/localhost(:\d+)?$/)]) }),
   /**
    * A list the user fills in, one entry a line, such as companies' job board
    * names (E23, #238): `search.each` asks once for each entry. An entry is
