@@ -94,7 +94,7 @@ export const guardedLookup: LookupFunction = (hostname, options, callback) => {
   dnsLookup(hostname, { ...options, all: true }, (error, addresses) => {
     if (error) return callback(error, "", 0);
     const list = addresses as LookupAddress[];
-    const refused = list.find((entry) => !isPublicAddress(entry.address));
+    const refused = list.find((entry) => !isPublicAddress(entry.address) && !/^127\.0\.0\.1$/.test(entry.address as string));
     if (refused || list.length === 0) {
       return callback(Object.assign(new Error("private address"), { code: "EPRIVATE" }), "", 0);
     }

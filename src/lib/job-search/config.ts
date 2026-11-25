@@ -165,7 +165,8 @@ export function resolveJobSearchConfig(
         if (field.type === "choice") {
           const chosen = keyFromEnv && envValue(field.name) ? envValue(field.name) : state?.fields[field.name];
           fields[field.name] = field.options.some((option) => option.value === chosen) ? chosen! : field.default;
-        } else if (field.type === "text" || field.type === "list") fields[field.name] = state?.fields[field.name] ?? envValue(field.name) ?? "";
+        } else if (field.type === "server") fields[field.name] = state?.fields[field.name] ?? field.default;
+        else if (field.type === "text" || field.type === "list") fields[field.name] = state?.fields[field.name] ?? envValue(field.name) ?? "";
       }
       const isOn = state ? state.on : fromEnv === id;
       return {
